@@ -1,0 +1,16 @@
+includes:
+    - phpstan-baseline.neon.dist
+    - vendor/phpstan/phpstan-mockery/extension.neon
+
+parameters:
+    level: 6
+    paths:
+        - src/
+        - tests/
+    tmpDir: var/phpstan/
+    stubFiles:
+        - vendor/asmblah/php-amqp-compat/phpstan-stubs/amqp.php
+    scanFiles:
+        - vendor/asmblah/php-amqp-compat/src/AmqpCompat/bootstrap.php
+        - vendor/asmblah/php-amqp-compat/src/Amqp/AMQPBasicProperties.php
+        - vendor/asmblah/php-amqp-compat/src/Amqp/AMQPEnvelope.php

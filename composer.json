@@ -1,0 +1,34 @@
+{
+    "name": "envoylope/amqp-sqs-driver",
+    "description": "AWS SQS driver for PHP AMQP-Compat",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Envoylope\\Amqp\\Driver\\Sqs\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Envoylope\\Amqp\\Driver\\Sqs\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "asmblah/php-amqp-compat": "dev-driver-refactor",
+        "aws/aws-sdk-php": "^3.385.3",
+        "psr/cache": "^1|^2|^3"
+    },
+    "require-dev": {
+        "mockery/mockery": "1.6.11",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-mockery": "^1.1",
+        "phpunit/phpunit": "^10.2",
+        "symfony/cache": "^6|^7"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
+}
