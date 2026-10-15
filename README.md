@@ -69,4 +69,4 @@ $bootConfig->installPackage(new AmqpCompatPackage(
 ));
 ```
 
-PHP AMQP-Compat: https://github.com/asmblah/php-amqp-compat
+[PHP AMQP-Compat]: https://github.com/asmblah/php-amqp-compat
