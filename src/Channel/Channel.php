@@ -212,7 +212,7 @@ class Channel implements ChannelInterface
                 'MaxNumberOfMessages' => 1,
                 'WaitTimeSeconds' => 0,
                 'MessageAttributeNames' => ['All'],
-                'AttributeNames' => ['ApproximateReceiveCount'],
+                'MessageSystemAttributeNames' => ['ApproximateReceiveCount'],
                 // If the application fails to acknowledge the message before the configured timeout
                 // it will be requeued, leading to duplicate work if the message is still being handled.
                 'VisibilityTimeout' => $this->messageVisibilityTimeoutSeconds,
@@ -919,7 +919,7 @@ class Channel implements ChannelInterface
                         'MaxNumberOfMessages' => $maxMessages,
                         'WaitTimeSeconds' => $pollDuration,
                         'MessageAttributeNames' => ['All'],
-                        'AttributeNames' => ['ApproximateReceiveCount'],
+                        'MessageSystemAttributeNames' => ['ApproximateReceiveCount'],
                         // If the application fails to acknowledge the message before the configured timeout
                         // it will be requeued, leading to duplicate work if the message is still being handled.
                         'VisibilityTimeout' => $this->messageVisibilityTimeoutSeconds,

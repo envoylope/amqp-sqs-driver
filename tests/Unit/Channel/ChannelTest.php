@@ -369,6 +369,26 @@ class ChannelTest extends AbstractTestCase
         static::assertFalse($envelope->isRedelivery());
     }
 
+    public function testBasicGetRequestsApproximateReceiveCountViaMessageSystemAttributeNames(): void
+    {
+        $this->registry->allows()
+            ->getQueueUrl('my_queue')
+            ->andReturn('https://sqs.example.com/my_queue');
+
+        $this->sqsClient->expects('receiveMessage')
+            ->once()
+            ->andReturnUsing(function (array $args): Result {
+                static::assertSame(['ApproximateReceiveCount'], $args['MessageSystemAttributeNames']);
+                static::assertArrayNotHasKey('AttributeNames', $args);
+
+                return new Result([
+                    'Messages' => [$this->buildSqsMessage('hello', 'receipt-attrs')],
+                ]);
+            });
+
+        $this->channel->basicGet('my_queue', false, AMQPQueueException::class, 'AMQPQueue::get');
+    }
+
     public function testBasicGetMarksMessageAsRedeliveredWhenApproximateReceiveCountIsAboveOne(): void
     {
         $this->registry->allows()
@@ -1013,6 +1033,41 @@ class ChannelTest extends AbstractTestCase
                 ]);
             });
 
+        $this->expectException(StopConsumptionException::class);
+
+        $this->channel->wait(45, AMQPChannelException::class, 'AMQPChannel::consume');
+    }
+
+    public function testWaitRequestsApproximateReceiveCountViaMessageSystemAttributeNames(): void
+    {
+        $this->registry->allows()
+            ->getQueueUrl('my_queue')
+            ->andReturn('https://sqs.example.com/my_queue');
+        $this->channel->basicConsume(
+            'my_queue',
+            'my-tag',
+            false,
+            true,
+            false,
+            static function (AMQPEnvelope $envelope): void {
+                throw new StopConsumptionException();
+            },
+            AMQPQueueException::class,
+            'AMQPQueue::consume'
+        );
+        $this->clock->allows('getUnixTimestamp')->andReturn(1000);
+        $this->sqsClient->allows('deleteMessage')->andReturn(new Result([]));
+
+        $this->sqsClient->expects('receiveMessage')
+            ->once()
+            ->andReturnUsing(function (array $args): Result {
+                static::assertSame(['ApproximateReceiveCount'], $args['MessageSystemAttributeNames']);
+                static::assertArrayNotHasKey('AttributeNames', $args);
+
+                return new Result([
+                    'Messages' => [$this->buildSqsMessage('hello', 'receipt-wait-attrs')],
+                ]);
+            });
         $this->expectException(StopConsumptionException::class);
 
         $this->channel->wait(45, AMQPChannelException::class, 'AMQPChannel::consume');

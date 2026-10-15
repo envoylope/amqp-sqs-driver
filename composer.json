@@ -15,7 +15,7 @@
     },
     "require": {
         "php": ">=8.1",
-        "asmblah/php-amqp-compat": "dev-driver-refactor",
+        "asmblah/php-amqp-compat": "^0.5.0",
         "aws/aws-sdk-php": "^3.385.3",
         "psr/cache": "^1|^2|^3"
     },
